@@ -1,0 +1,20 @@
+---
+- hosts: bots
+  tasks:
+    - name: Install system packages
+      apt:
+        pkg:
+          - nginx-full
+          - supervisor
+          - python3.6
+        update_cache: yes
+        cache_valid_time: 300
+        state: latest
+      become: true
+
+    - name: Perform a OS update
+      apt:
+        upgrade: dist
+        update_cache: yes
+        cache_valid_time: 300
+      become: true

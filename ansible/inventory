@@ -1,0 +1,12 @@
+all:
+    children:
+        bots:
+            hosts:
+                laser-tag-pi-1:
+                    machine_tag: 1
+                laser-tag-pi-2:
+                    machine_tag: 2
+            vars:
+                ansible_user: pi
+                ansible_connection: ssh
+                ansible_python_interpreter: /usr/bin/python3
