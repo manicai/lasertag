@@ -18,3 +18,13 @@
         update_cache: yes
         cache_valid_time: 300
       become: true
+
+    - name: Clean up unneeded packages
+      apt:
+        autoremove: yes
+      become: true
+
+    - name: Clean up the APT cache
+      apt:
+        autoclean: yes
+      become: true
