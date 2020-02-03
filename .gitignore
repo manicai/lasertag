@@ -1,2 +1,4 @@
-.idea/
-.venv/
+build/
+node_modules/
+
+.sass-cache

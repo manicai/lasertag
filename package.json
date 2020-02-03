@@ -1,0 +1,18 @@
+{
+  "name": "lasertag",
+  "devDependencies": {
+    "sass": "^1.25.0",
+    "snowpack": "^1.1.2",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "servor": "^3.1.0"
+  },
+  "scripts": {
+    "scss-dev": "npx sass --watch scss/controller.scss:build/css/controller.css",
+    "scss": "npx sass scss/controller.scss:build/css/controller.css",
+    "serve": "npx servor --reload",
+    "ts-dev": "npx tsc --watch",
+    "ts": "npx tsc"
+  }
+}

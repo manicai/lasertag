@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Laser Tag Controller</title>
+    <link href="build/css/controller.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+    <div class="overlay">
+        <div class="text">
+        Please rotate to landscape
+        </div>
+    </div>
+    <div class="controller">
+        <div class="zone joypad">
+            <canvas id="joypad"></canvas>
+        </div>
+        <div class="zone status">
+            <div>
+                <h1>Score</h1>
+            </div>
+            <div>
+                <table class="score">
+                    <thead>
+                    <tr>
+                        <td>Me</td>
+                        <td>Opponent</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="score_me">0</td>
+                            <td id="score_opponent">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="zone buttons">
+            <button class="fire button">Fire</button>
+        </div>
+    </div>
+    <script src="build/js/controller.js" lang="javascript"></script>
+</body>
+</html>

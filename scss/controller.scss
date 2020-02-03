@@ -1,0 +1,117 @@
+body {
+  font-family: sans-serif;
+  background: antiquewhite;
+}
+
+@media (orientation: landscape) {
+  div.overlay {
+    display: none !important;
+  }
+}
+
+@media (orientation: portrait) {
+  div.overlay {
+    display: block;
+  }
+}
+
+div.overlay {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.95;
+  background: antiquewhite;
+
+  div.text {
+    font-size: 16vw;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 30vh;
+    margin: 2px;
+  }
+}
+
+div.controller {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+
+  div.zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    display: inline-block;
+  }
+
+  .joypad {
+    left: 0;
+    right: 33%;
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      background: antiquewhite;
+    }
+  }
+
+  $zone-border: darkgray solid 1px;
+
+  .status {
+    left: 33%;
+    right: 33%;
+    border-left: $zone-border;
+    border-right: $zone-border;
+
+    h1 {
+      text-align: center;
+      margin-top: 2%;
+      margin-bottom: 2%;
+    }
+
+    table.score {
+      width: 100%;
+      font-size: x-large;
+
+      thead {
+        font-weight: bold;
+        text-align: center;
+
+        td {
+          border-bottom: $zone-border;
+        }
+      }
+
+      td {
+        width: 50%;
+        text-align: center;
+        border-bottom: $zone-border;
+      }
+    }
+  }
+
+  .buttons {
+    left: 67%;
+    right: 0;
+
+    button.fire{
+      position: absolute;
+      left: 27.5%;
+      top: 35%;
+      width: 45%;
+      height: 30%;
+      border-radius: 40%;
+      background: orangered;
+      border: black 5px solid;
+      color: whitesmoke;
+      font-size: 7vh;
+      font-weight: bolder;
+      //letter-spacing: 0.05em;
+    }
+  }
+}
