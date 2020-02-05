@@ -101,17 +101,21 @@ div.controller {
 
     button.fire{
       position: absolute;
-      left: 27.5%;
+      left: 30%;
       top: 35%;
-      width: 45%;
+      width: 40%;
       height: 30%;
       border-radius: 40%;
       background: orangered;
       border: black 5px solid;
       color: whitesmoke;
-      font-size: 7vh;
+      font-size: xx-large;
       font-weight: bolder;
-      //letter-spacing: 0.05em;
+      text-align: center;
+
+      &:active{
+        background: darkred;
+      }
     }
   }
 }
