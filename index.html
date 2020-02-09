@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>Laser Tag Controller</title>
     <link href="build/css/controller.css" type="text/css" rel="stylesheet" />
 </head>
@@ -32,6 +33,27 @@
                             <td id="score_me">0</td>
                             <td id="score_opponent">0</td>
                         </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="diagnostics">
+                <h2>Diagnostics</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <td>X</td>
+                        <td>Y</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td id="diag_x">&nbsp;</td>
+                        <td id="diag_y">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" id="diag_txt">&nbsp</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>

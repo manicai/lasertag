@@ -95,6 +95,25 @@ div.controller {
         border-bottom: $zone-border;
       }
     }
+
+    div.diagnostics {
+      h2 {
+        text-align: center;
+      }
+
+      table {
+        width: 100%;
+        border: brown solid 1px;
+
+        thead {
+          text-align: center;
+        }
+
+        tbody {
+          text-align: center;
+        }
+      }
+    }
   }
 
   .buttons {
