@@ -1,3 +1,5 @@
+import set = Reflect.set;
+
 function fire_button_clicked() {
     setup_canvas();
 }
@@ -42,5 +44,11 @@ function setup_canvas() {
     draw_joypad(0, 0);
 }
 
-setup_canvas();
-document.getElementById("fire_button").onclick = fire_button_clicked;
+function setup() {
+    setup_canvas();
+    document.getElementById("fire_button").onclick = fire_button_clicked;
+
+    window.onresize = () => { setup_canvas(); }
+}
+
+setup();
