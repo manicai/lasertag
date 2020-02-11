@@ -108,6 +108,9 @@ var joypad;
 function setup() {
     joypad = new Joypad();
     document.getElementById("fire_button").onclick = fire_button_clicked;
+    // Stop scrolling on touchmove, otherwise that interferes with joypad
+    document.body.addEventListener('touchmove', (e) => e.preventDefault(),
+                                   { passive: false})
 }
 
 setup();
