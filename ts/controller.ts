@@ -1,5 +1,3 @@
-import set = Reflect.set;
-
 function fire_button_clicked() {
     console.log('Fired');
 }
@@ -12,6 +10,15 @@ function circle(context: CanvasRenderingContext2D, x: number, y: number, r: numb
     } else {
         context.stroke();
     }
+}
+
+function log_coord(x: number, y: number) {
+    document.getElementById("diag_x").innerText = x.toString();
+    document.getElementById("diag_y").innerText = y.toString();
+}
+
+function log_txt(o: any) {
+    document.getElementById("diag_txt").innerText = o.toString();
 }
 
 class Joypad {
@@ -64,14 +71,14 @@ class Joypad {
     }
 
     touch_start(evt: TouchEvent) {
-        this.log_txt(evt.touches[0])
+        log_txt(evt.touches[0])
         const touch = evt.touches[0];
-        this.log(touch.clientX, touch.clientY);
+        log_coord(touch.clientX, touch.clientY);
     }
 
     touch_move(evt: TouchEvent) {
         const touch = evt.touches[0];
-        this.log(touch.clientX, touch.clientY);
+        log_coord(touch.clientX, touch.clientY);
 
         if (this.distance(touch) <= this.outer_radius) {
             this.stick_x = touch.clientX;
@@ -81,7 +88,7 @@ class Joypad {
     }
 
     touch_end(evt: Event) {
-        this.log_txt("Touch end");
+        log_txt("Touch end");
         this.stick_x = this.centre_x;
         this.stick_y = this.centre_y;
         this.draw_joypad();
@@ -92,25 +99,22 @@ class Joypad {
         const dy = touch.clientY - this.centre_y;
         return Math.sqrt(dx * dx + dy * dy);
     }
-
-    log(x: number, y: number) {
-        document.getElementById("diag_x").innerText = x.toString();
-        document.getElementById("diag_y").innerText = y.toString();
-    }
-
-    log_txt(o: any) {
-        document.getElementById("diag_txt").innerText = o.toString();
-    }
 }
 
-var joypad;
+// let joypad: Joypad;
 
 function setup() {
-    joypad = new Joypad();
+    const joypad = new Joypad();
     document.getElementById("fire_button").onclick = fire_button_clicked;
     // Stop scrolling on touchmove, otherwise that interferes with joypad
     document.body.addEventListener('touchmove', (e) => e.preventDefault(),
-                                   { passive: false})
+                                   { passive: false});
+    // window.addEventListener('orientationchange', (e) => {
+    //     // log_txt("orientation changed " + window.orientation);
+    // });
+    window.addEventListener('resize', () => {
+        joypad.resize();
+    });
 }
 
 setup();
