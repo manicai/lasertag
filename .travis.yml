@@ -1,0 +1,16 @@
+language: python
+python: 
+  - '3.8'
+before_install:
+  - pip install poetry
+  - wget https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh -O ~/.nvm/nvm.sh
+  - source ~/.nvm/nvm.sh
+  - nvm install 
+  - npm install -g yarn
+install:
+  - poetry install
+script:
+  - poetry run pytest
+  - yarn run ts
+  - yarn run scss
+  - yarn run tslint
