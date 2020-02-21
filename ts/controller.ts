@@ -1,7 +1,3 @@
-function fire_button_clicked() {
-    console.log('Fired');
-}
-
 function circle(context: CanvasRenderingContext2D, x: number, y: number, r: number, solid: boolean) {
     context.beginPath();
     context.ellipse(x, y, r, r, 0, 0, Math.PI * 2);
@@ -21,16 +17,22 @@ function log_txt(o: any) {
     document.getElementById("diag_txt").innerText = o.toString();
 }
 
+function fire_button_clicked() {
+    log_txt('Fired');
+}
+
 class Joypad {
     canvas: HTMLCanvasElement;
     parent: HTMLElement;
 
-    centre_x: number;
+    joypad_centre_x: number;
+    firebutton_centre_x: number;
     centre_y: number;
     outer_radius: number;
 
     stick_x: number;
     stick_y: number;
+    firing: boolean;
 
     constructor() {
         this.canvas = document.getElementById('joypad_canvas') as HTMLCanvasElement;
@@ -51,13 +53,21 @@ class Joypad {
         const width = this.canvas.clientWidth;
         const height = this.canvas.clientHeight;
 
-        this.centre_x = width / 2.0;
+        this.joypad_centre_x = width / 6.0;
+        this.firebutton_centre_x = 5 * width / 6.0;
         this.centre_y = height / 2.0;
-        this.stick_x = this.centre_x;
+        this.stick_x = this.joypad_centre_x;
         this.stick_y = this.centre_y;
-        this.outer_radius = Math.min(width, height) / 4.0;
+        this.outer_radius = Math.min(width, height) / 6.0;
 
+        this.firing = false;
+
+        this.redraw();
+    }
+
+    redraw() {
         this.draw_joypad();
+        this.draw_firebutton();
     }
 
     draw_joypad() {
@@ -66,52 +76,72 @@ class Joypad {
         const context = this.canvas.getContext('2d');
         context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         context.lineWidth = 5;
-        circle(context, this.centre_x, this.centre_y, this.outer_radius, false);
+        context.fillStyle = 'black';
+        circle(context, this.joypad_centre_x, this.centre_y, this.outer_radius, false);
         circle(context, this.stick_x, this.stick_y, inner_radius, true);
     }
 
+    draw_firebutton() {
+        const context = this.canvas.getContext('2d');
+        context.lineWidth = 5;
+        context.fillStyle = this.firing ? 'darkred' : 'orangered';
+        circle(context, this.firebutton_centre_x, this.centre_y, this.outer_radius, true);
+    }
+
     touch_start(evt: TouchEvent) {
-        log_txt(evt.touches[0])
         const touch = evt.touches[0];
         log_coord(touch.clientX, touch.clientY);
+        this.firing = this.fire_pressed(evt);
+        this.redraw();
     }
 
     touch_move(evt: TouchEvent) {
         const touch = evt.touches[0];
         log_coord(touch.clientX, touch.clientY);
-
-        if (this.distance(touch) <= this.outer_radius) {
-            this.stick_x = touch.clientX;
-            this.stick_y = touch.clientY;
-            this.draw_joypad();
+        this.firing = this.fire_pressed(evt);
+        if (this.joypad_distance(touch) <= this.outer_radius) {
+            this.stick_x = touch.screenX;
+            this.stick_y = touch.screenY;
+            this.redraw();
         }
     }
 
-    touch_end(evt: Event) {
+    touch_end(evt: TouchEvent) {
         log_txt("Touch end");
-        this.stick_x = this.centre_x;
+        this.stick_x = this.joypad_centre_x;
         this.stick_y = this.centre_y;
-        this.draw_joypad();
+        this.firing = this.fire_pressed(evt);
+        this.redraw();
     }
 
-    distance(touch: Touch): number {
-        const dx = touch.clientX - this.centre_x;
-        const dy = touch.clientY - this.centre_y;
+    fire_pressed(evt: TouchEvent) {
+        for (let touch of evt.touches) {
+            if (this.fire_distance(touch) <= this.outer_radius) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    joypad_distance(touch: Touch): number {
+        const dx = touch.screenX - this.joypad_centre_x;
+        const dy = touch.screenY - this.centre_y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    fire_distance(touch: Touch): number {
+        const dx = touch.screenX - this.firebutton_centre_x;
+        const dy = touch.screenY - this.centre_y;
         return Math.sqrt(dx * dx + dy * dy);
     }
 }
 
-// let joypad: Joypad;
-
 function setup() {
     const joypad = new Joypad();
-    document.getElementById("fire_button").onclick = fire_button_clicked;
     // Stop scrolling on touchmove, otherwise that interferes with joypad
     document.body.addEventListener('touchmove', (e) => e.preventDefault(),
                                    { passive: false});
-    // window.addEventListener('orientationchange', (e) => {
-    //     // log_txt("orientation changed " + window.orientation);
-    // });
     window.addEventListener('resize', () => {
         joypad.resize();
     });
