@@ -17,10 +17,6 @@ function log_txt(o: any) {
     document.getElementById("diag_txt").innerText = o.toString();
 }
 
-function fire_button_clicked() {
-    log_txt('Fired');
-}
-
 class Joypad {
     canvas: HTMLCanvasElement;
     parent: HTMLElement;
