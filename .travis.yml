@@ -8,8 +8,9 @@ before_install:
   - npm install -g yarn
 install:
   - poetry install
+  - yarn install --dev
 script:
-  - poetry run pytest
   - yarn run ts
   - yarn run scss
   - yarn run tslint
+  - poetry run pytest
