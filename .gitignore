@@ -1,4 +1,4 @@
 build/
 node_modules/
-
-.sass-cache
+.sass-cache/
+__pycache__/
