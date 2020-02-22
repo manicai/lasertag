@@ -21,3 +21,41 @@ describe('project_to_unit_circle function', () => {
         expect(result[1]).to.equal(0);
     });
 });
+
+describe('map_to_control_diamond function', () => {
+    const test_points = [
+        [ 0, 0 ],
+        [ 0, 1 ],
+        [ 1, 0 ],
+        [ -1, 0 ],
+        [ 0, -1],
+        [ 0.5, 0 ],
+        [ 0, -0.5 ]
+    ];
+
+    test_points.forEach((test) => {
+        it('should not move point on the axis ' + test, () => {
+            const result = g.map_to_control_diamond(test[0], test[1]);
+            expect(result[0], 'x co-ordinate').to.equal(test[0]);
+            expect(result[1], 'y co-ordinate').to.equal(test[1]);
+        })
+    });
+
+    const quadrants = [
+        [  1,  1 ],
+        [ -1,  1 ],
+        [ -1, -1 ],
+        [  1,  1 ]
+    ];
+    quadrants.forEach((signs) => {
+        const x = signs[0] / Math.sqrt(2.0);
+        const y = signs[1] / Math.sqrt(2.0);
+        const e_x = signs[0] * 0.5;
+        const e_y = signs[1] * 0.5;
+        it('should map  [' + x + ', ' + y + '] to [' + e_x + ', ' + e_y + ']', () => {
+            const result = g.map_to_control_diamond(x, y);
+            expect(result[0], 'x co-ordinate').to.be.closeTo(e_x, 0.000001);
+            expect(result[1], 'y co-ordinate').to.be.closeTo(e_y, 0.000001);
+        });
+    });
+});
