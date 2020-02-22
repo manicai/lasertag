@@ -1,5 +1,6 @@
 language: python
-python: 
+python:
+  - '3.7'
   - '3.8'
 before_install:
   - pip install poetry
@@ -14,3 +15,4 @@ script:
   - yarn run scss
   - yarn run tslint
   - poetry run pytest
+  - yarn run test

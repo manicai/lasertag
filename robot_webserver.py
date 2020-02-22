@@ -61,7 +61,7 @@ async def opponent(request):
 
 @routes.post('/reset')
 async def reset_handler(request):
-    request.app['score'] = Score()
+    request.app['score'].reset()
     return web.json_response({})
 
 
