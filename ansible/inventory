@@ -4,8 +4,10 @@ all:
             hosts:
                 laser-tag-pi-1:
                     machine_tag: 1
+                    opponent: laser-tag-pi-2
                 laser-tag-pi-2:
                     machine_tag: 2
+                    opponent: laser-tag-pi-1
             vars:
                 ansible_user: pi
                 ansible_connection: ssh
