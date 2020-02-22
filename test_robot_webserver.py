@@ -1,29 +1,5 @@
-import pytest
-
+import unittest.mock as mock
 import robot_webserver as web
-
-
-class FakeRobot:
-    def __init__(self):
-        self.fired_shot = False
-        self.last_move_left = None
-        self.last_move_right = None
-        self.has_been_hit = False
-
-    def shoot(self):
-        self.fired_shot = True
-
-    def move(self, left: float, right: float):
-        self.last_move_left = left
-        self.last_move_right = right
-
-    def is_hit(self):
-        return self.has_been_hit
-
-
-@pytest.fixture()
-def robot():
-    return FakeRobot()
 
 
 async def test_reset(aiohttp_client, loop):
@@ -32,12 +8,13 @@ async def test_reset(aiohttp_client, loop):
     assert resp.status == 200
 
 
-def test_websocket_shoot(robot: FakeRobot):
+def test_websocket_shoot():
+    robot = mock.Mock()
     web.parse_websocket('shoot', robot)
-    assert robot.fired_shot
+    robot.shoot.assert_called_once()
 
 
-def test_websocket_move(robot: FakeRobot):
+def test_websocket_move():
+    robot = mock.Mock()
     web.parse_websocket('move 0.5 -0.75', robot)
-    assert robot.last_move_left == 0.5
-    assert robot.last_move_right == -0.75
+    robot.move.assert_called_with(0.5, -0.75)
