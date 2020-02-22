@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
+    "module": "AMD",
     "noImplicitAny": true,
+    "outFile": "build/js/controller.js",
     "removeComments": true,
     "sourceMap": true,
-    "outDir": "build/js",
     "target": "es2015"
   },
   "include": [

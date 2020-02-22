@@ -22,7 +22,7 @@ export function map_to_control_diamond(x: number, y: number): [number, number] {
 // Take a point within an arbitrary circle and calculate the power for the
 // left and right motors based on that, i.e. calculate motor speeds from
 // joypad location.
-export function calculator_motor_power(x: number, y: number, x_centre: number, y_centre: number, radius: number): [number, number] {
+export function calculate_motor_power(x: number, y: number, x_centre: number, y_centre: number, radius: number): [number, number] {
     const unit_circle = project_to_unit_circle(x, y, x_centre, y_centre, radius);
     const diamond = map_to_control_diamond(unit_circle[0], unit_circle[1]);
     const d_x = diamond[0];

@@ -1,3 +1,5 @@
+import { calculate_motor_power } from './geometry';
+
 function circle(context: CanvasRenderingContext2D, x: number, y: number, r: number, solid: boolean) {
     context.beginPath();
     context.ellipse(x, y, r, r, 0, 0, Math.PI * 2);
@@ -85,27 +87,29 @@ class Joypad {
     }
 
     touch_start(evt: TouchEvent) {
-        const touch = evt.touches[0];
-        log_coord(touch.clientX, touch.clientY);
+        const was_firing = this.firing;
         this.firing = this.fire_pressed(evt);
+        if (this.firing && !was_firing) {
+            this.send_to_websocket('shoot');
+        }
         this.redraw();
     }
 
     touch_move(evt: TouchEvent) {
         const touch = evt.touches[0];
-        log_coord(touch.clientX, touch.clientY);
         this.firing = this.fire_pressed(evt);
         if (this.joypad_distance(touch) <= this.outer_radius) {
             this.stick_x = touch.screenX;
             this.stick_y = touch.screenY;
+            this.send_motor_setting();
             this.redraw();
         }
     }
 
     touch_end(evt: TouchEvent) {
-        log_txt("Touch end");
         this.stick_x = this.joypad_centre_x;
         this.stick_y = this.centre_y;
+        this.send_motor_setting()
         this.firing = this.fire_pressed(evt);
         this.redraw();
     }
@@ -131,9 +135,22 @@ class Joypad {
         const dy = touch.screenY - this.centre_y;
         return Math.sqrt(dx * dx + dy * dy);
     }
+
+    send_motor_setting() {
+        const speeds = calculate_motor_power(this.stick_x, this.stick_y,
+                                             this.joypad_centre_x, this.centre_y,
+                                             this.outer_radius);
+        // log_coord(speeds[0], -speeds[1]);
+        const message = `motor ${speeds[0].toFixed(2)} ${-speeds[1].toFixed(2)}`;
+        this.send_to_websocket(message);
+    }
+
+    send_to_websocket(message: string) {
+        log_txt(message);
+    }
 }
 
-function setup_joypad() {
+export default function setup_joypad() {
     const joypad = new Joypad();
     // Stop scrolling on touchmove, otherwise that interferes with joypad
     document.body.addEventListener('touchmove', (e) => e.preventDefault(),
