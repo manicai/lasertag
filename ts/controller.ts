@@ -17,8 +17,6 @@ function log_txt(o: any) {
     document.getElementById("diag_txt").innerText = o.toString();
 }
 
-
-
 class Joypad {
     canvas: HTMLCanvasElement;
     parent: HTMLElement;
