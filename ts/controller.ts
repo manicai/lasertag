@@ -135,7 +135,7 @@ class Joypad {
     }
 }
 
-function setup() {
+function setup_joypad() {
     const joypad = new Joypad();
     // Stop scrolling on touchmove, otherwise that interferes with joypad
     document.body.addEventListener('touchmove', (e) => e.preventDefault(),
@@ -145,4 +145,4 @@ function setup() {
     });
 }
 
-setup();
+setup_joypad();
