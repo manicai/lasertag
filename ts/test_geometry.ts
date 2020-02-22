@@ -59,3 +59,26 @@ describe('map_to_control_diamond function', () => {
         });
     });
 });
+
+describe('calculate_motor_power function', () => {
+    it('straight forward should give full power', () => {
+        const result = g.calculator_motor_power(100, 200, 100, 100, 100);
+        expect(result[0]).to.equal(1.0);
+        expect(result[1]).to.equal(1.0);
+    });
+    it('straight back should give full back power', () => {
+        const result = g.calculator_motor_power(100, 0, 100, 100, 100);
+        expect(result[0]).to.equal(-1.0);
+        expect(result[1]).to.equal(-1.0);
+    });
+    it('straight left should give fast right rotation', () => {
+        const result = g.calculator_motor_power(0, 100, 100, 100, 100);
+        expect(result[0]).to.equal(-1.0);
+        expect(result[1]).to.equal( 1.0);
+    });
+    it('straight left should give fast left rotation', () => {
+        const result = g.calculator_motor_power(200, 100, 100, 100, 100);
+        expect(result[0]).to.equal(1.0);
+        expect(result[1]).to.equal( -1.0);
+    });
+});
