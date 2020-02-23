@@ -26,8 +26,8 @@
     "scss": "npx sass scss/controller.scss:build/css/controller.css",
     "serve": "npx servor --reload",
     "test": "mocha -r ts-node/register ts/**/test_*.ts",
-    "ts-dev": "npx tsc --watch",
-    "ts": "npx tsc",
+    "ts-dev": "npx tsc --watch --module AMD --outfile build/js/controller.js",
+    "ts": "npx tsc --module AMD --outfile build/js/controller.js",
     "tslint": "npx eslint ts/*"
   }
 }
