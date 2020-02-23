@@ -61,23 +61,33 @@ describe('map_to_control_diamond function', () => {
 });
 
 describe('calculate_motor_power function', () => {
-    it('straight forward should give full power', () => {
-        const result = g.calculate_motor_power(100, 200, 100, 100, 100);
+    // Values from iPhone X
+    const c_x = 163;
+    const c_y = 254;
+    const r = 82;
+
+    it('should give zeroes for centre', () => {
+        const result = g.calculate_motor_power(c_x, c_y, c_x, c_y, r);
+        expect(result[0]).to.equal(0);
+        expect(result[1]).to.equal(0);
+    });
+    it('should give full power for straight forward', () => {
+        const result = g.calculate_motor_power(c_x, c_y - r, c_x, c_y, r);
         expect(result[0]).to.equal(1.0);
         expect(result[1]).to.equal(1.0);
     });
-    it('straight back should give full back power', () => {
-        const result = g.calculate_motor_power(100, 0, 100, 100, 100);
+    it('should give full power back for straight back', () => {
+        const result = g.calculate_motor_power(c_x, c_y + r, c_x, c_y, r);
         expect(result[0]).to.equal(-1.0);
         expect(result[1]).to.equal(-1.0);
     });
-    it('straight left should give fast right rotation', () => {
-        const result = g.calculate_motor_power(0, 100, 100, 100, 100);
+    it('should give fast anticlockwise rotation for full left', () => {
+        const result = g.calculate_motor_power(c_x - r, c_y, c_x, c_y, r);
         expect(result[0]).to.equal(-1.0);
         expect(result[1]).to.equal( 1.0);
     });
-    it('straight left should give fast left rotation', () => {
-        const result = g.calculate_motor_power(200, 100, 100, 100, 100);
+    it('should give fast clockwise rotation for full right', () => {
+        const result = g.calculate_motor_power(c_x + r, c_y, c_x, c_y, r);
         expect(result[0]).to.equal(1.0);
         expect(result[1]).to.equal( -1.0);
     });

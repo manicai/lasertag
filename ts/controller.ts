@@ -140,8 +140,8 @@ class Joypad {
         const speeds = calculate_motor_power(this.stick_x, this.stick_y,
                                              this.joypad_centre_x, this.centre_y,
                                              this.outer_radius);
-        // log_coord(speeds[0], -speeds[1]);
-        const message = `motor ${speeds[0].toFixed(2)} ${-speeds[1].toFixed(2)}`;
+        log_coord(this.stick_x, this.stick_y);
+        const message = `motor ${speeds[0].toFixed(2)} ${speeds[1].toFixed(2)}`;
         this.send_to_websocket(message);
     }
 

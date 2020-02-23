@@ -24,7 +24,9 @@ export function map_to_control_diamond(x: number, y: number): [number, number] {
 // joypad location.
 export function calculate_motor_power(x: number, y: number, x_centre: number, y_centre: number, radius: number): [number, number] {
     const unit_circle = project_to_unit_circle(x, y, x_centre, y_centre, radius);
-    const diamond = map_to_control_diamond(unit_circle[0], unit_circle[1]);
+    // Multiple y by -1 as screen y co-ordinates increase downwards but maths
+    // was done on usual upwards.
+    const diamond = map_to_control_diamond(unit_circle[0], -unit_circle[1]);
     const d_x = diamond[0];
     const d_y = diamond[1];
     const motor_left = d_y + d_x;
