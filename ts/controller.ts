@@ -22,6 +22,7 @@ function log_txt(o: any) {
 class Joypad {
     canvas: HTMLCanvasElement;
     parent: HTMLElement;
+    socket: WebSocket;
 
     joypad_centre_x: number;
     firebutton_centre_x: number;
@@ -42,6 +43,16 @@ class Joypad {
         this.canvas.ontouchstart = this.touch_start.bind(this);
         this.canvas.ontouchmove = this.touch_move.bind(this);
         this.canvas.ontouchend = this.touch_end.bind(this);
+
+        try {
+            const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+            const ws_url = protocol + "://" + location.host + "/control";
+            this.socket = new WebSocket(ws_url);
+        }
+        catch {
+            log_txt("Can't open websocket");
+            this.socket = null;
+        }
     }
 
     resize() {
@@ -147,6 +158,9 @@ class Joypad {
 
     send_to_websocket(message: string) {
         log_txt(message);
+        if (this.socket === null) { return; }
+
+        this.socket.send(message);
     }
 }
 

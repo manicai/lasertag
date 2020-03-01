@@ -1,13 +1,10 @@
 import aiohttp
 import aiohttp.web as web
-import uuid
+import socket
+
+from robot_interface import Robot
 
 routes = web.RouteTableDef()
-
-
-def get_mac_address() -> str:
-    """Return the MAC address of the computer"""
-    return hex(uuid.getnode())[2:].upper()
 
 
 class Score:
@@ -24,20 +21,20 @@ class WebError(Exception):
     pass
 
 
-def parse_websocket(msg: str, robot):
+def parse_websocket(msg: str, robot: Robot):
     if msg.startswith('shoot'):
         robot.shoot()
-    elif msg.startswith('move '):
+    elif msg.startswith('motor '):
         parts = msg.split()
         (_, left, right) = parts[:3]
         robot.move(float(left), float(right))
     else:
-        raise WebError('Unknown message command')
+        raise WebError('Unknown message command: ' + msg)
 
 
 @routes.get('/control')
 async def control(request):
-    ws = web.WebSocketResponse()
+    ws = web.WebSocketResponse()                    
     await ws.prepare(request)
     robot = request.app['robot']
     async for msg in ws:
@@ -65,9 +62,9 @@ async def reset_handler(request):
     return web.json_response({})
 
 
-def build_application(robot):
+def build_application(robot: Robot):
     app = web.Application()
-    app['sys_id'] = get_mac_address()
+    app['sys_id'] = socket.gethostname()
     app['robot'] = robot
     app['score'] = Score()
     app.add_routes(routes)
@@ -76,10 +73,10 @@ def build_application(robot):
     return app
 
 
-def run(robot=None):
+def run(robot: Robot = None):
     app = build_application(robot)
     web.run_app(app)
 
 
 if __name__ == '__main__':
-    run(None)
+    run(Robot())
