@@ -16,5 +16,5 @@ def test_websocket_shoot():
 
 def test_websocket_move():
     robot = mock.Mock()
-    web.parse_websocket('move 0.5 -0.75', robot)
+    web.parse_websocket('motor 0.5 -0.75', robot)
     robot.move.assert_called_with(0.5, -0.75)
