@@ -8,6 +8,8 @@ license = "GPL-3.0-only"
 [tool.poetry.dependencies]
 python = ">3.7"
 aiohttp = "^3.6.2"
+explorerhat = "^0.4.2"
+smbus = "^1.1.post2"
 
 [tool.poetry.dev-dependencies]
 ansible = "^2.9.3"
