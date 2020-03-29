@@ -7,7 +7,7 @@ IS_RASPBERRY_PI = (os.uname()[4] == 'armv6l')
 
 try:
     import explorerhat as eh
-except ImportError:
+except:
     print("Could not import ExplorerHAT module", file=sys.stderr, flush=True)
     if IS_RASPBERRY_PI:
         raise
