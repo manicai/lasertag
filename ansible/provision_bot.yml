@@ -1,4 +1,18 @@
 ---
+- hosts: localhost
+  tasks:
+    - name: Build Typescript
+      command: yarn run ts
+      args:
+        chdir: "{{local_project_dir}}"
+
+    - name: Build SCSS
+      command:  yarn run scss
+      args:
+        chdir: "{{local_project_dir}}"
+  vars:
+    local_project_dir: "{{playbook_dir}}/.."
+
 - hosts: bots
   tasks:
     - name: Install system packages
@@ -27,4 +41,86 @@
     - name: Clean up the APT cache
       apt:
         autoclean: yes
+      become: true
+
+    - name: Download Python Poetry install script
+      get_url:
+        url: https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py
+        dest: "{{home_dir}}/get-poetry.py"
+
+    - name: Install Poetry
+      command: python3 get-poetry.py --yes
+      args:
+        chdir: "{{home_dir}}"
+        creates: "{{poetry_path}}"
+
+    - name: Remove default Nginx package file
+      file:
+        path: "{{remote_web_dir}}/index.nginx-debian.html"
+        state: absent
+      become: true
+
+    - name: Copy HTML and other resources
+      copy:
+        src: "{{local_project_dir}}/{{item}}"
+        dest: "{{remote_web_dir}}/{{item}}"
+        owner: "{{web_user}}"
+      with_items:
+        - index.html
+        - poetry.lock
+        - pyproject.toml
+        - robot_interface.py
+        - robot_webserver.py
+      become: true
+
+    - name: Copy HTML and other resources
+      copy:
+        src: "{{local_project_dir}}/{{item}}"
+        dest: "{{remote_web_dir}}"
+        owner: "{{web_user}}"
+      with_items:
+        - build
+        - vendor
+      become: true
+
+    - name: Configure Poetry
+      command: "{{poetry_path}} config virtualenvs.in-project true"
+      args:
+        chdir: "{{remote_web_dir}}"
+      become: true
+
+    - name: Install Python dependencies
+      command: "{{poetry_path}} install"
+      args:
+        chdir: "{{remote_web_dir}}"
+      become: true
+
+    - name: Install Supervisord configuration
+      template:
+        src: supervisor_server.conf.j2
+        dest: /etc/supervisor/conf.d/server.conf
+        mode: 0644
+        owner: root
+        group: root
+      become: true
+
+    - name: Install Nginx configuration
+      template:
+        src: nginx_default_site.j2
+        dest: /etc/nginx/sites-available/default
+        mode: 0644
+        owner: root
+        group: root
+      become: true
+
+    - name: Restart Supervisord
+      service:
+        name: supervisor
+        state: restarted
+      become: true
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
       become: true

@@ -1,0 +1,4 @@
+[program:robot_server]
+command={{remote_web_dir}}/.venv/bin/python -u {{remote_web_dir}}/robot_webserver.py
+startsecs=15
+directory={{remote_web_dir}}

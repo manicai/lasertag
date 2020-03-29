@@ -12,3 +12,8 @@ all:
                 ansible_user: pi
                 ansible_connection: ssh
                 ansible_python_interpreter: /usr/bin/python3
+                local_project_dir: "{{inventory_dir}}/.."
+                remote_web_dir: /var/www/html
+                web_user: root
+                home_dir: /home/pi
+                poetry_path: "{{home_dir}}/.poetry/bin/poetry"
