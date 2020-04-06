@@ -1,5 +1,6 @@
 import sys
 import os
+import asyncio
 
 # Not definitive but good enough to differentiate between a dev machine and
 # a Pi. There wouldn't be a ExplorerHAT on a different ARM architecture.
@@ -22,18 +23,20 @@ class Robot:
     def __init__(self):
         pass
 
-    def shoot(self):
+    async def shoot(self):
         print("Shoot")
         if eh:
-            eh.output.one.fade(100, 0, 2000)
+            eh.output.one.on()
+            await asyncio.sleep(1)
+            eh.output.one.off()
 
-    def move(self, left_motor: float, right_motor: float):
+    async def move(self, left_motor: float, right_motor: float):
         print(f"Set speed to {left_motor}, {right_motor})")
         if eh:
-            eh.motor.two.speed(left_motor * MOTOR_SCALE)
-            eh.motor.one.speed(right_motor * -MOTOR_SCALE)
+            eh.motor.one.speed(left_motor * MOTOR_SCALE)
+            eh.motor.two.speed(right_motor * -MOTOR_SCALE)
 
-    def is_hit(self) -> bool:
+    async def is_hit(self) -> bool:
         if eh:
             signal = eh.analog.one.read()
             return signal > 4.0

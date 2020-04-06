@@ -21,13 +21,13 @@ class WebError(Exception):
     pass
 
 
-def parse_websocket(msg: str, robot: Robot):
+async def parse_websocket(msg: str, robot: Robot):
     if msg.startswith('shoot'):
-        robot.shoot()
+        await robot.shoot()
     elif msg.startswith('motor '):
         parts = msg.split()
         (_, left, right) = parts[:3]
-        robot.move(float(left), float(right))
+        await robot.move(float(left), float(right))
     else:
         raise WebError('Unknown message command: ' + msg)
 
@@ -40,7 +40,7 @@ async def control(request):
     async for msg in ws:
         if msg.type == aiohttp.WSMsgType.TEXT:
             try:
-                parse_websocket(msg.data, robot)
+                await parse_websocket(msg.data, robot)
             except Exception as exc:
                 print("Websocket error: ", exc)
         elif msg.type == aiohttp.WSMsgType.ERROR:
