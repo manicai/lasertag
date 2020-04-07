@@ -1,20 +1,35 @@
-import unittest.mock as mock
 import robot_webserver as web
+import pytest
 
 
-async def test_reset(aiohttp_client, loop):
+class MockRobot:
+    def __init__(self):
+        self.shoot_called = False
+        self.move_called_with = None
+
+    async def shoot(self):
+        self.shoot_called = True
+
+    async def move(self, left, right):
+        self.move_called_with = (left, right)
+
+
+@pytest.fixture
+def robot():
+    return MockRobot()
+
+
+async def test_reset(aiohttp_client):
     client = await aiohttp_client(web.build_application(None))
     resp = await client.post('/reset')
     assert resp.status == 200
 
 
-def test_websocket_shoot():
-    robot = mock.Mock()
-    web.parse_websocket('shoot', robot)
-    robot.shoot.assert_called_once()
+async def test_websocket_shoot(robot):
+    await web.parse_websocket('shoot', robot)
+    assert robot.shoot_called
 
 
-def test_websocket_move():
-    robot = mock.Mock()
-    web.parse_websocket('motor 0.5 -0.75', robot)
-    robot.move.assert_called_with(0.5, -0.75)
+async def test_websocket_move(robot):
+    await web.parse_websocket('motor 0.5 -0.75', robot)
+    assert robot.move_called_with == (0.5, -0.75)
